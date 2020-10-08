@@ -67,7 +67,7 @@ void StartScene::start()
 	m_pName[0]->setParent(this);
 	addChild(m_pName[0]);
 
-	m_pName[1] = new Label("Ian Chapman ", "Consolas", 15, white, glm::vec2(700.0f, 585.0f));
+	m_pName[1] = new Label("Ian Chapman 101248866", "Consolas", 15, white, glm::vec2(700.0f, 585.0f));
 	m_pName[1]->setParent(this);
 	addChild(m_pName[1]);
 	
