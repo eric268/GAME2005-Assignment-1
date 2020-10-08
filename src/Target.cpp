@@ -87,6 +87,21 @@ void Target::recalculateProjectile()
 	changeX();
 	changeY();
 }
+void Target::calculateSpeedGivenAngle()
+{
+	float temp = m_theta;
+	temp = (temp *PI) / 180;
+	m_speedThrown = sqrt(((m_distanceToEnemy * m_gravity) / (sin(2 * temp))));
+	std::cout << m_speedThrown << std::endl;
+}
+
+void Target::velocityGivenAngle()
+{
+	calculateSpeedGivenAngle();
+	changeX();
+	changeY();
+}
+
 
 glm::vec2 Target::getDirection()
 {
@@ -178,13 +193,25 @@ void Target::setMass(float mass)
 	m_mass = mass;
 }
 
+void Target::caculateNotHittingStormT()
+{
+	changeX();
+	changeY();
+}
+
 void Target::clean()
 {
 }
 
 void Target::m_move()
 {
-	if (m_distanceToEnemy > 3 && m_updateDetenator)
+	if (getTransform()->position.y >=525.0f)
+	{
+		m_updateDetenator = false;
+		getRigidBody()->acceleration = glm::vec2(0.f);
+		getRigidBody()->velocity = glm::vec2(0.0f);
+	}
+	else if (m_distanceToEnemy > 3 && m_updateDetenator)
 	{
 		const float deltaTime = 1.0f / 60.f;
 

@@ -4,7 +4,7 @@
 
 Player::Player()
 {
-	TextureManager::Instance()->load("../Assets/textures/Wookie1.png", "Wookie");
+	TextureManager::Instance()->load("../Assets/textures/wookie.png", "Wookie");
 	
 	auto size = TextureManager::Instance()->getTextureSize("Wookie");
 	setWidth(size.x);

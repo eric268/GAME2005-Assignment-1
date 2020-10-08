@@ -21,7 +21,7 @@ public:
 	virtual void clean() override;
 	virtual void handleEvents() override;
 	virtual void start() override;
-	float GuiSliderPlaceholders[5];
+	float GuiSliderPlaceholders[6];
 
 	void setGuidSlidePlaceholders();
 	void resetSceneSettings();
@@ -42,6 +42,7 @@ private:
 	Label* m_pAccelerationLabel;
 	Label* m_pForceLabel;
 	Label* m_pPPM;
+	Label* m_pCannotHitTrooper;
 	
 	Button* m_pBackButton;
 	Button* m_pNextButton;
@@ -64,9 +65,8 @@ private:
 	//ImVec4 m_euclideanButtonColour;
 
 	// ImGui visibility variables
-	bool m_shipVisible = true;
-	bool m_planetVisible = true;
-	bool m_minesVisible = true;
+	bool hitStormtrooper = true;
+	bool useAngleChosen = false;
 };
 
 #endif /* defined (__PLAY_SCENE__) */

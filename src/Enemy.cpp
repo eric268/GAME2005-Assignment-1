@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 
 Enemy::Enemy() {
-	TextureManager::Instance()->load("../Assets/textures/StormTrooper.png", "StormTrooper");
+	TextureManager::Instance()->load("../Assets/textures/StormTrooper3.png", "StormTrooper");
 
 	auto size = TextureManager::Instance()->getTextureSize("StormTrooper");
 	setWidth(size.x);

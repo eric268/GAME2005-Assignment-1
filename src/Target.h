@@ -44,6 +44,10 @@ public:
 	void setTheta(float);
 	void setMass(float);
 
+	void caculateNotHittingStormT();
+	void calculateSpeedGivenAngle();
+	void velocityGivenAngle();
+
 
 
 private:

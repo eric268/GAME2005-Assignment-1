@@ -1,4 +1,4 @@
-#include "PlayScene.h"
+﻿#include "PlayScene.h"
 #include "Game.h"
 #include "EventManager.h"
 #include "Util.h"
@@ -37,10 +37,32 @@ void PlayScene::update()
 
 	//Printing Labels
 	m_pDistanceLabel->setText("Distance = " + std::to_string(m_pThermalDetonator->checkDistance(m_pEnemy[1])) +"m");
-	m_pVelocityLabel->setText("Velocity = " + std::to_string(Util::magnitude(m_pThermalDetonator->getRigidBody()->velocity))+"m/s");
+	if (std::to_string(Util::magnitude(m_pThermalDetonator->getRigidBody()->velocity)) == "-nan(ind)")
+	{
+		m_pVelocityLabel->setText("Velocity = 0m/s");
+		m_pCannotHitTrooper->setText("Cannot hit trooper with current settings.Reset Scene");
+	}
+	else
+	{
+		m_pCannotHitTrooper->setText(" ");
+		m_pVelocityLabel->setText("Velocity = " + std::to_string(Util::magnitude(m_pThermalDetonator->getRigidBody()->velocity)) + "m/s");
+	}
 	m_pMassLabel->setText("Weight = " + std::to_string(m_pThermalDetonator->getMass()) + "kg");
 	m_pAccelerationLabel->setText("Acceleration = " + std::to_string(m_pThermalDetonator->getRigidBody()->acceleration.y) + "m/s^2");
 	m_pForceLabel->setText("Force = " + std::to_string(m_pThermalDetonator->calculateForce()) + "N");
+
+	if (std::to_string(GuiSliderPlaceholders[5]) == ("-nan(ind)"))
+	{
+		m_pCannotHitTrooper->setText("Cannot hit trooper with current settings.Reset Scene");
+		GuiSliderPlaceholders[5] = 0;
+		m_pDistanceLabel->setText("Distance = 0m");
+	}
+	if (std::to_string(GuiSliderPlaceholders[2]) == ("-nan(ind)"))
+	{
+		m_pCannotHitTrooper->setText("Cannot hit trooper with current settings.Reset Scene");
+		GuiSliderPlaceholders[0] = 0;
+		m_pDistanceLabel->setText("Distance = 0m");
+	}
 
 }
 
@@ -153,6 +175,7 @@ void PlayScene::start()
 
 	// Label
 	const SDL_Color white = { 255,255,255, 255 };
+	const SDL_Color red = { 255,0,0,255 };
 
 	m_pDistanceLabel = new Label("Distance", "Consolas", 20, white, glm::vec2(596.0f, 40.0f));
 	m_pDistanceLabel->setParent(this);
@@ -178,6 +201,13 @@ void PlayScene::start()
 	m_pPPM->setParent(this);
 	addChild(m_pPPM);
 
+	m_pCannotHitTrooper = new Label(" ", "Consolas", 25, red, glm::vec2(400.0f, 350.0f));
+	m_pCannotHitTrooper->setParent(this);
+	addChild(m_pCannotHitTrooper);
+
+	m_pThermalDetonator->setDistanceToEnemy(m_pThermalDetonator->checkDistance(m_pEnemy[1]));
+	m_pThermalDetonator->recalculateProjectile();
+
 	resetSceneSettings();
 }
 void PlayScene::setGuidSlidePlaceholders()
@@ -187,24 +217,55 @@ void PlayScene::setGuidSlidePlaceholders()
 	GuiSliderPlaceholders[2] = m_pThermalDetonator->getSpeedThrown();
 	GuiSliderPlaceholders[3] = m_pThermalDetonator->getGravity();
 	GuiSliderPlaceholders[4] = m_pThermalDetonator->getMass();
+	GuiSliderPlaceholders[5] = m_pThermalDetonator->getTheta();
 }
 void PlayScene::resetSceneSettings()
 {
+	
 	m_pPlayer->getTransform()->position.x = 50;
 	m_pThermalDetonator->getTransform()->position = m_pPlayer->getTransform()->position;
 	m_pThermalDetonator->setGravity(9.8);
 	m_pThermalDetonator->setSpeedThrown(95);
 	setEnemyPositionInPlayScene();
 	m_pThermalDetonator->setUpdateDetenator(false);
+	m_pThermalDetonator->setDistanceToEnemy(m_pThermalDetonator->checkDistance(m_pEnemy[1]));
 	m_pThermalDetonator->recalculateProjectile();
 	m_pThermalDetonator->setMass(2.2);
 	setGuidSlidePlaceholders();
+	m_pCannotHitTrooper->setText(" ");
+	m_pThermalDetonator->getRigidBody()->velocity = glm::vec2(0.0f);
+
 }
 void PlayScene::checkGuiChangs()
 {
+	
+	if (ImGui::Checkbox("Always hit stormtrooper", &hitStormtrooper))
+	{
+		
+	}
+	if (ImGui::Checkbox("Always use chosen angle", &useAngleChosen))
+	{
+
+	}
 	if (ImGui::Button("Throw Detenator"))
 	{
-		m_pThermalDetonator->recalculateProjectile();
+		m_pThermalDetonator->getTransform()->position = m_pPlayer->getTransform()->position;
+		if (hitStormtrooper)
+		{
+			if (useAngleChosen)
+			{
+				m_pThermalDetonator->velocityGivenAngle();
+				GuiSliderPlaceholders[2] = m_pThermalDetonator->getSpeedThrown();
+			}
+			else
+			{
+				m_pThermalDetonator->recalculateProjectile();
+				GuiSliderPlaceholders[5] = m_pThermalDetonator->getTheta();
+			}
+		}
+		else
+			m_pThermalDetonator->caculateNotHittingStormT();
+
 		m_pThermalDetonator->setUpdateDetenator(true);
 	}
 	ImGui::SameLine();
@@ -235,6 +296,11 @@ void PlayScene::checkGuiChangs()
 	if (ImGui::SliderFloat("Mass", &GuiSliderPlaceholders[4], 0.1, 10))
 	{
 		m_pThermalDetonator->setMass(4);
+	}
+	if (ImGui::SliderFloat("Angle (theta)", &GuiSliderPlaceholders[5], 0, 90))
+	{
+		m_pThermalDetonator->setTheta(GuiSliderPlaceholders[5]);
+
 	}
 }
 void PlayScene::setEnemyPositionInPlayScene()

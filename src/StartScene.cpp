@@ -73,13 +73,13 @@ void StartScene::start()
 	
 
 	m_pPlayer = new Player();
-	m_pPlayer->getTransform()->position = glm::vec2(400.0f, 545.0f);
+	m_pPlayer->getTransform()->position = glm::vec2(400.0f, 510.0f);
 	addChild(m_pPlayer);
 
 	for (int i = 0; i < 4; i++)
 	{
 		m_arrEnemies[i] = new Enemy();
-		m_arrEnemies[i]->getTransform()->position = glm::vec2(232.0f + i*110.0f, 550.0f);
+		m_arrEnemies[i]->getTransform()->position = glm::vec2(150.0f + i*160.0f, 510.0f);
 		addChild(m_arrEnemies[i]);
 	}
 
