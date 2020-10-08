@@ -63,7 +63,6 @@ void PlayScene::update()
 		GuiSliderPlaceholders[2] = 0;
 		m_pDistanceLabel->setText("Distance = 0m");
 	}
-
 }
 
 void PlayScene::clean()
@@ -207,6 +206,8 @@ void PlayScene::start()
 
 	m_pThermalDetonator->setDistanceToEnemy(m_pThermalDetonator->checkDistance(m_pEnemy[1]));
 	m_pThermalDetonator->recalculateProjectile();
+
+	
 
 	resetSceneSettings();
 }

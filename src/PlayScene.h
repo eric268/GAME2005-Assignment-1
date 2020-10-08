@@ -66,7 +66,7 @@ private:
 
 	// ImGui visibility variables
 	bool hitStormtrooper = true;
-	bool useAngleChosen = false;
+	bool useAngleChosen = true;
 };
 
 #endif /* defined (__PLAY_SCENE__) */

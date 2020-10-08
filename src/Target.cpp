@@ -59,7 +59,7 @@ float Target::changeX()
 	float temp =m_theta*PI/180;
 	temp = cos(temp);
 	m_direction.x = m_speedThrown * temp;
-	if (getTransform()->position.x > m_enemyPosition.x)
+	if (getTransform()->position.x > m_enemyPosition.x && m_enemyPosition.x >0)
 	{
 		m_direction *= -1;
 	}
@@ -210,6 +210,7 @@ void Target::m_move()
 		m_updateDetenator = false;
 		getRigidBody()->acceleration = glm::vec2(0.f);
 		getRigidBody()->velocity = glm::vec2(0.0f);
+		m_direction = glm::vec2(0.0f);
 	}
 	else if (m_distanceToEnemy > 3 && m_updateDetenator)
 	{
@@ -233,6 +234,7 @@ void Target::m_move()
 		getRigidBody()->velocity = glm::vec2(0.0f);
 		m_distanceToEnemy = 0;
 		getTransform()->position = m_enemyPosition;
+		m_direction = glm::vec2(0.0f);
 
 	}
 }
