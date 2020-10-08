@@ -28,6 +28,8 @@ private:
 	Label* m_pStartLabel2{};
 	Enemy* m_arrEnemies[4];
 
+	Label* m_pName[2];
+
 	Player* m_pPlayer{};
 
 	Button* m_pStartButton;
