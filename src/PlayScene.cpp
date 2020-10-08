@@ -60,7 +60,7 @@ void PlayScene::update()
 	if (std::to_string(GuiSliderPlaceholders[2]) == ("-nan(ind)"))
 	{
 		m_pCannotHitTrooper->setText("Cannot hit trooper with current settings.Reset Scene");
-		GuiSliderPlaceholders[0] = 0;
+		GuiSliderPlaceholders[2] = 0;
 		m_pDistanceLabel->setText("Distance = 0m");
 	}
 
